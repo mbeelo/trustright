@@ -1,8 +1,22 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Create OpenAI client lazily to avoid build-time errors
+let _openai: OpenAI | null = null;
+
+function getOpenAIClient() {
+  if (!_openai) {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      // During build time or when API key is missing, return null
+      // This prevents build-time errors during static generation
+      return null;
+    }
+    _openai = new OpenAI({
+      apiKey: apiKey,
+    });
+  }
+  return _openai;
+}
 
 export interface WebsiteAnalysis {
   // Business Identity
@@ -227,6 +241,12 @@ Return a JSON object with exactly these fields (use null/empty arrays if data no
 Return ONLY the JSON object. No explanations, no markdown, no code blocks.`;
 
   try {
+    const openai = getOpenAIClient();
+    if (!openai) {
+      console.log('OpenAI client not available (missing API key), using fallback data for', domain);
+      return getFallbackAnalysis(domain);
+    }
+
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-search-preview",
       web_search_options: {},
