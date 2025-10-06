@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd Code/trustright && npm run build",
+  "devCommand": "cd Code/trustright && npm run dev",
+  "installCommand": "cd Code/trustright && npm install",
+  "framework": "nextjs",
+  "outputDirectory": "Code/trustright/.next"
+}
