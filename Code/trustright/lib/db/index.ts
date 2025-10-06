@@ -5,15 +5,26 @@ import * as schema from './schema';
 // Create database connection lazily to avoid build-time errors
 let _db: ReturnType<typeof drizzle> | null = null;
 
+function getDatabase() {
+  if (!_db) {
+    const dbUrl = process.env.DATABASE_URL;
+    if (!dbUrl) {
+      // During build time or when DATABASE_URL is missing, return null
+      // This prevents build-time errors during static generation
+      return null;
+    }
+    const sql = neon(dbUrl);
+    _db = drizzle(sql, { schema });
+  }
+  return _db;
+}
+
 export const db = new Proxy({} as ReturnType<typeof drizzle>, {
   get(target, prop) {
-    if (!_db) {
-      if (!process.env.DATABASE_URL) {
-        throw new Error('DATABASE_URL is not set');
-      }
-      const sql = neon(process.env.DATABASE_URL);
-      _db = drizzle(sql, { schema });
+    const database = getDatabase();
+    if (!database) {
+      throw new Error('Database not configured - DATABASE_URL is missing');
     }
-    return (_db as Record<string, unknown>)[prop];
+    return (database as Record<string, unknown>)[prop];
   }
 });
