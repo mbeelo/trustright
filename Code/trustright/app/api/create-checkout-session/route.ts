@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { stripe, STRIPE_PLANS } from '@/lib/stripe';
+import { getStripeClient, STRIPE_PLANS } from '@/lib/stripe';
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,6 +21,14 @@ export async function POST(request: NextRequest) {
     }
 
     const planData = STRIPE_PLANS[plan as keyof typeof STRIPE_PLANS];
+
+    const stripe = getStripeClient();
+    if (!stripe) {
+      return NextResponse.json(
+        { error: 'Stripe not configured' },
+        { status: 500 }
+      );
+    }
 
     const checkoutSession = await stripe.checkout.sessions.create({
       customer_email: session.user.email,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe, STRIPE_PLANS } from '@/lib/stripe';
+import { getStripeClient, STRIPE_PLANS } from '@/lib/stripe';
 import { db } from '@/lib/db';
 import { userSubscriptions } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
@@ -12,6 +12,11 @@ export async function POST(request: NextRequest) {
   let event: Stripe.Event;
 
   try {
+    const stripe = getStripeClient();
+    if (!stripe) {
+      return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 });
+    }
+
     event = stripe.webhooks.constructEvent(
       body,
       signature,

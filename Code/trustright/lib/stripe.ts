@@ -1,8 +1,24 @@
 import Stripe from 'stripe';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-12-18.acacia',
-});
+// Create Stripe client lazily to avoid build-time errors
+let _stripe: Stripe | null = null;
+
+export function getStripeClient() {
+  if (!_stripe) {
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    if (!secretKey) {
+      // During build time or when API key is missing, return null
+      // This prevents build-time errors during static generation
+      return null;
+    }
+    _stripe = new Stripe(secretKey, {
+      apiVersion: '2024-12-18.acacia',
+    });
+  }
+  return _stripe;
+}
+
+export const stripe = getStripeClient;
 
 export const STRIPE_PLANS = {
   PRO: {
