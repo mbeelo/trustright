@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { Globe, AlertTriangle, Users, TrendingUp, Share2, LogOut, User, LogIn } from 'lucide-react';
+import { Globe, AlertTriangle, Users, TrendingUp, Share2, LogOut, User, LogIn, Chrome, Download } from 'lucide-react';
+import Link from 'next/link';
 
 interface PoliticalDonation {
   year?: string;
@@ -65,6 +66,7 @@ export default function TrustRight() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [error, setError] = useState<string>('');
+  const [showAccountDropdown, setShowAccountDropdown] = useState(false);
 
   const fetchSubscription = useCallback(async () => {
     try {
@@ -92,6 +94,15 @@ export default function TrustRight() {
       setUrl(preloadedUrl);
     }
   }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => setShowAccountDropdown(false);
+    if (showAccountDropdown) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [showAccountDropdown]);
 
   const generateFullReport = async (analysisData: AnalysisResult & Record<string, unknown>) => {
     const canvas = document.createElement('canvas');
@@ -534,29 +545,77 @@ export default function TrustRight() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <nav className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold"><span className="text-black">Trust</span><span className="text-orange-700">Right</span></h1>
-          <div className="flex items-center gap-4">
+          <Link href="/" className="text-2xl font-bold">
+            <span className="text-black">Trust</span><span className="text-orange-700">Right</span>
+          </Link>
+
+          <div className="flex items-center gap-4 ml-auto">
+            <Link href="/extension" className="text-orange-700 hover:text-orange-800 font-medium flex items-center">
+              <Chrome className="w-4 h-4 mr-1" />
+              Extension
+            </Link>
             {subscription && (
               <div className="text-sm text-gray-600">
                 {subscription.searchesRemaining || 0} searches left
               </div>
             )}
             {session ? (
-              <div className="flex items-center gap-3">
+              <div className="relative">
                 <button
-                  onClick={() => window.location.href = '/dashboard'}
-                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowAccountDropdown(!showAccountDropdown);
+                  }}
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 px-2 py-1 rounded-md hover:bg-gray-100"
                 >
-                  <User size={16} />
-                  {session.user?.email}
+                  <div className="w-8 h-8 bg-orange-700 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                    {session.user?.email?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                  <span className="max-w-32 truncate">{session.user?.email}</span>
                 </button>
-                <button
-                  onClick={() => signOut()}
-                  className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900"
-                >
-                  <LogOut size={16} />
-                  Sign Out
-                </button>
+
+                {showAccountDropdown && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    <div className="p-4 border-b border-gray-100">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-orange-700 rounded-full flex items-center justify-center text-white font-medium">
+                          {session.user?.email?.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">{session.user?.email}</p>
+                          {subscription && (
+                            <p className="text-xs text-gray-500">
+                              {subscription.searchesRemaining || 0} searches remaining
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="py-2">
+                      <button
+                        onClick={() => {
+                          window.location.href = '/dashboard';
+                          setShowAccountDropdown(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <User size={16} />
+                        Dashboard
+                      </button>
+                      <button
+                        onClick={() => {
+                          signOut();
+                          setShowAccountDropdown(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <LogOut size={16} />
+                        Sign Out
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center gap-3">
@@ -580,7 +639,8 @@ export default function TrustRight() {
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-6 pt-48 pb-32 text-center">
+      <div className="flex-1 flex flex-col">
+        <div className="max-w-4xl mx-auto px-6 pt-48 pb-32 text-center">
         <h2 className="text-6xl font-extrabold mb-2 text-gray-900" style={{letterSpacing: '-0.02em'}}>Trust the <span className="text-orange-700 relative">web<span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-700 transform scale-x-0 animate-[slideIn_1s_ease-out_0.5s_forwards]"></span></span>, again.</h2>
         <p className="text-xl mb-8" style={{color: '#666'}}>
           Find out who owns the sites you visit and where their money goes.
@@ -618,6 +678,7 @@ export default function TrustRight() {
               : "Sign in to analyze websites"}
           </p>
         </div>
+
       </div>
 
       {result && (
@@ -967,6 +1028,23 @@ export default function TrustRight() {
           </div>
         </div>
       )}
+      </div>
+
+      {/* Simple Extension Banner */}
+      <div className="bg-orange-50 border-t border-orange-200 py-4">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-center gap-4 text-sm">
+            <span className="text-gray-600">Get instant trust scores while browsing</span>
+            <Link
+              href="/extension"
+              className="text-orange-700 hover:text-orange-800 font-medium flex items-center gap-1"
+            >
+              <Chrome className="w-4 h-4" />
+              Add Extension
+            </Link>
+          </div>
+        </div>
+      </div>
 
       <footer className="bg-gray-50 border-t border-gray-200 py-8 mt-auto">
         <div className="max-w-7xl mx-auto px-6 text-center">

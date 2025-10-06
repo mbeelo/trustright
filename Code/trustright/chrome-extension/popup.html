@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustRight - Website Transparency</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 380px;
+      min-height: 500px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 24px 20px;
+    }
+
+    .current-site {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid #e5e7eb;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .site-domain {
+      font-weight: 600;
+      color: #1f2937;
+      font-size: 16px;
+    }
+
+    .analyze-btn {
+      background: #ea580c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .analyze-btn:hover {
+      background: #dc2626;
+    }
+
+    .analyze-btn:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .score-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .score-display.excellent { background: #dcfce7; }
+    .score-display.good { background: #fef3c7; }
+    .score-display.caution { background: #fed7aa; }
+    .score-display.poor { background: #fee2e2; }
+
+    .score-value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .score-display.excellent .score-value { color: #16a34a; }
+    .score-display.good .score-value { color: #ca8a04; }
+    .score-display.caution .score-value { color: #ea580c; }
+    .score-display.poor .score-value { color: #dc2626; }
+
+    .score-label {
+      color: #6b7280;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .score-indicator {
+      font-size: 24px;
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-item {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #e5e7eb;
+    }
+
+    .stat-number {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .account-section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid #e5e7eb;
+    }
+
+    .account-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .account-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ea580c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      margin-right: 12px;
+    }
+
+    .account-info h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 2px;
+    }
+
+    .account-info p {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .usage-bar {
+      width: 100%;
+      height: 6px;
+      background: #f3f4f6;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 12px 0 8px;
+    }
+
+    .usage-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #16a34a 0%, #ca8a04 70%, #dc2626 100%);
+      transition: width 0.3s ease;
+    }
+
+    .usage-text {
+      font-size: 11px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      color: #374151;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: #f9fafb;
+      border-color: #ea580c;
+    }
+
+    .btn.primary {
+      background: #ea580c;
+      color: white;
+      border-color: #ea580c;
+    }
+
+    .btn.primary:hover {
+      background: #dc2626;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #6b7280;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #f3f4f6;
+      border-top: 2px solid #ea580c;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error {
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .sign-in-prompt {
+      text-align: center;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .sign-in-prompt h3 {
+      color: #1f2937;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .sign-in-prompt p {
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    /* Extension Toggle Styles */
+    .extension-toggle {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .toggle-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .toggle-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1f2937;
+    }
+
+    .toggle-switch {
+      width: 44px;
+      height: 24px;
+      background: #d1d5db;
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .toggle-switch.active {
+      background: #ea580c;
+    }
+
+    .toggle-slider {
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .toggle-switch.active .toggle-slider {
+      transform: translateX(20px);
+    }
+
+    .toggle-description {
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+
+    .toggle-description.disabled {
+      color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">TrustRight</div>
+    <div class="tagline">Know before you trust</div>
+  </div>
+
+  <div class="content">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      Initializing...
+    </div>
+
+    <div id="error" class="error" style="display: none;"></div>
+
+    <div id="main-content" style="display: none;">
+      <div class="current-site">
+        <div class="site-header">
+          <div class="site-domain" id="current-domain">Loading...</div>
+          <button class="analyze-btn" id="analyze-btn">Analyze</button>
+        </div>
+
+        <div id="analysis-results" style="display: none;">
+          <div class="score-display" id="score-display">
+            <div>
+              <div class="score-value" id="score-value">--</div>
+              <div class="score-label">Trust Score</div>
+            </div>
+            <div class="score-indicator" id="score-indicator">⏳</div>
+          </div>
+
+          <div class="quick-stats">
+            <div class="stat-item">
+              <div class="stat-number" id="issues-count">0</div>
+              <div class="stat-label">Issues Found</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number" id="donations-count">0</div>
+              <div class="stat-label">Political Donations</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="account-section">
+        <div id="user-info" style="display: none;">
+          <div class="account-header">
+            <div class="account-avatar" id="user-avatar">U</div>
+            <div class="account-info">
+              <h3 id="user-name">User</h3>
+              <p id="user-plan">Free Plan</p>
+            </div>
+          </div>
+          <div class="usage-bar">
+            <div class="usage-fill" id="usage-fill" style="width: 0%"></div>
+          </div>
+          <div class="usage-text" id="usage-text">0 of 5 searches used</div>
+
+          <!-- Extension Toggle -->
+          <div class="extension-toggle">
+            <div class="toggle-header">
+              <span class="toggle-label">Auto-Analysis</span>
+              <div class="toggle-switch" id="extension-toggle">
+                <div class="toggle-slider"></div>
+              </div>
+            </div>
+            <div class="toggle-description" id="toggle-description">Automatically analyze websites as you browse</div>
+          </div>
+        </div>
+
+        <div id="sign-in-prompt" class="sign-in-prompt">
+          <h3>Sign in to analyze websites</h3>
+          <p>Get instant transparency reports and track your usage across devices.</p>
+          <button class="btn primary" id="sign-in-btn">Sign In to TrustRight</button>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn" id="dashboard-btn">
+          📊 Dashboard
+        </button>
+        <button class="btn" id="full-report-btn">
+          📋 Full Report
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

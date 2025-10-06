@@ -1,0 +1,36 @@
+{
+  "name": "trustright-chrome-extension",
+  "version": "1.0.0",
+  "description": "TrustRight Chrome Extension - Instantly analyze website transparency and trust scores",
+  "main": "background.js",
+  "scripts": {
+    "build": "zip -r trustright-extension.zip . -x '*.zip' '*.git*' 'node_modules/*' 'package*.json' '.DS_Store'",
+    "package": "npm run build",
+    "dev": "echo 'Load extension in Chrome developer mode from this directory'",
+    "validate": "web-ext lint --source-dir=. --ignore-files=package.json,package-lock.json,*.zip"
+  },
+  "keywords": [
+    "chrome-extension",
+    "website-analysis",
+    "transparency",
+    "trust-score",
+    "corporate-transparency",
+    "browser-extension"
+  ],
+  "author": "TrustRight",
+  "license": "Proprietary",
+  "homepage": "https://trustright.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trustright/chrome-extension"
+  },
+  "bugs": {
+    "url": "https://trustright.app/contact"
+  },
+  "engines": {
+    "chrome": ">=88"
+  },
+  "devDependencies": {
+    "web-ext": "^8.0.0"
+  }
+}

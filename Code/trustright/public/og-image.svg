@@ -1,0 +1,40 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:0.1"/>
+      <stop offset="100%" style="stop-color:#ea580c;stop-opacity:0.2"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="white"/>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Main logo TR -->
+  <g transform="translate(100, 200)">
+    <!-- T in black -->
+    <rect x="0" y="0" width="120" height="30" fill="#000000"/>
+    <rect x="45" y="0" width="30" height="240" fill="#000000"/>
+
+    <!-- R in orange -->
+    <rect x="150" y="0" width="30" height="240" fill="#ea580c"/>
+    <rect x="150" y="0" width="90" height="30" fill="#ea580c"/>
+    <rect x="150" y="105" width="70" height="30" fill="#ea580c"/>
+    <rect x="210" y="30" width="30" height="75" fill="#ea580c"/>
+    <rect x="180" y="135" width="60" height="105" fill="#ea580c"/>
+  </g>
+
+  <!-- Title -->
+  <text x="350" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="700" fill="#1f2937">TrustRight</text>
+
+  <!-- Subtitle -->
+  <text x="350" y="340" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#6b7280">AI-Powered Website Transparency Analysis</text>
+
+  <!-- Description -->
+  <text x="350" y="410" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#9ca3af">Discover the truth behind any website with comprehensive</text>
+  <text x="350" y="440" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#9ca3af">business intelligence and transparency analysis.</text>
+
+  <!-- Accent elements -->
+  <circle cx="1050" cy="150" r="80" fill="#ea580c" opacity="0.1"/>
+  <circle cx="1100" cy="500" r="60" fill="#f97316" opacity="0.15"/>
+</svg>
