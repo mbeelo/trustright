@@ -14,6 +14,6 @@ export const db = new Proxy({} as ReturnType<typeof drizzle>, {
       const sql = neon(process.env.DATABASE_URL);
       _db = drizzle(sql, { schema });
     }
-    return (_db as any)[prop];
+    return (_db as Record<string, unknown>)[prop];
   }
 });
