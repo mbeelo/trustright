@@ -255,7 +255,7 @@ export default function TrustRight() {
       ctx.fillText('Contact Verification', leftMargin, yPos);
       yPos += 35;
 
-      if (analysisData.phone_number?.status) {
+      if (analysisData.phone_number && typeof analysisData.phone_number === 'object' && 'status' in analysisData.phone_number) {
         ctx.fillStyle = '#333333';
         ctx.font = '18px -apple-system, BlinkMacSystemFont, sans-serif';
         ctx.fillText('Phone Number: ', leftMargin, yPos);
