@@ -1,0 +1,46 @@
+{
+  "name": "clearchoice",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack -p 8080",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@auth/drizzle-adapter": "^1.10.0",
+    "@neondatabase/serverless": "^1.0.2",
+    "@stripe/stripe-js": "^8.0.0",
+    "cheerio": "^1.1.2",
+    "dns": "^0.2.2",
+    "dotenv": "^17.2.3",
+    "drizzle-kit": "^0.31.5",
+    "drizzle-orm": "^0.44.6",
+    "lucide-react": "^0.544.0",
+    "next": "15.5.4",
+    "next-auth": "^4.24.11",
+    "node-fetch": "^3.3.2",
+    "openai": "^6.1.0",
+    "puppeteer": "^24.23.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "recharts": "^3.2.1",
+    "stripe": "^19.1.0",
+    "whois": "^2.15.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+
+# TrustRight - Website Transparency & Corporate Analysis
+# https://trustright.app
+
+# Allow all pages
+Allow: /
+Allow: /about
+Allow: /contact
+Allow: /terms
+Allow: /privacy
+
+# Disallow admin and API routes
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /dashboard/
+
+# Sitemap location
+Sitemap: https://trustright.app/sitemap.xml
+
+# Crawl-delay for politeness
+Crawl-delay: 1
